@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Share Poll {% endblock title %}
+
+{% block content %}
+
+
+  {% if sent %}
+    <h1>E-mail successfully sent</h1>
+    <p>
+    "{{ poll.question }}" was successfully sent to {{ form.cleaned_data.to }}.
+    </p>
+  {% else %}
+        <h1>Share "{{ poll.question }}" by e-mail</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+        <input class="btn btn-outline-success" type="submit" value="Share Poll">
+        </form>
+    {% endif %}
+
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h1>Edit Poll</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+    <button class="btn btn-outline-success ml-2" type="submit"><a href="{% url 'poll_detail' poll.id %}"></a>Update Poll</button>
+    </form>
+    <br>
+{% endblock content %}
+

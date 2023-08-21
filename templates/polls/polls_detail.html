@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Poll Details{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h4 class="font-weight-bold">Available Poll Details</h4>
+        </div>
+        <div class="card-body">
+            <br>
+            <h3>{{ polls.question }}</h3>
+            <br>
+            <form method="post" action="post">
+                {% csrf_token %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="option" id="option1" value="{{ poll.option1 }}">
+                    <label class="form-check-label" for="option1">
+                        {{ polls.option1 }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="option" id="option2" value="{{ poll.option2 }}">
+                    <label class="form-check-label" for="option2">
+                        {{ polls.option2 }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="option" id="option3" value="{{ poll.option3 }}">
+                    <label class="form-check-label" for="option3">
+                        {{ polls.option3 }}
+                    </label>
+                </div>
+            </form>
+            <br>
+            <br>
+            <a class="btn btn-outline-info" href="{% url 'vote' polls.pk %}">Cast Vote</a>
+        
+            <a class="btn btn-outline-secondary" href="{% url 'edit_poll' polls.pk %}">Edit Poll</a>
+    
+            <a class="btn btn-outline-primary" href="{% url 'share_poll' polls.pk %}">Share Poll</a>
+        </div>
+
+        <div class="card-footer">
+            <div class="text-muted">
+                
+            </div>
+        </div>
+    </div>
+{% endblock content %}

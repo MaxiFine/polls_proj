@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Articles{% endblock title %}
+
+{% block content %}
+
+    {% for poll in object_list %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">
+                    Poll by {{ user.email }} <br>
+                    <a href="{% url 'poll_detail' poll.id %}">{{ poll.question }}</a>
+                </span>
+            </div>
+
+            <div class="card-body">
+                <a class="btn btn-outline-info" href="{% url 'vote' poll.pk %}">Cast Vote</a>
+            </div>
+            <div class="card-footer">
+                <div class="card-footer text-center text-muted">
+                    <p>
+                        <a href="{% url 'edit_poll' poll.pk %}">Edit</a> |  
+                        <a href="{% url 'share_poll' poll.pk %}">Share Poll</a> | 
+                        <a href="{% url 'vote' poll.pk %}">Vote</a>     
+                    </p>
+                </div>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+    {% include "pagination.html" with page=page_obj %}
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Articles{% endblock title %}
+
+{% block content %}
+
+    {% for poll in object_list %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">
+                    Poll by {{ user.email }} <br>
+                    <a href="{% url 'poll_detail' poll.id %}">{{ poll.question }}</a>
+                </span>
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="#">
+                    {% csrf_token %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="option" id="option1" value="{{ poll.option1 }}">
+                        <label class="form-check-label" for="option1">
+                            {{ poll.option1 }}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="option" id="option2" value="{{ poll.option2 }}">
+                        <label class="form-check-label" for="option2">
+                            {{ poll.option2 }}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="option" id="option3" value="{{ poll.option3 }}">
+                        <label class="form-check-label" for="option3">
+                            {{ poll.option3 }}
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Vote</button>
+                </form>
+            </div>
+
+            <div class="card-footer">
+                <div class="card-footer text-center text-muted">
+                    <p>
+                    {% if user == poll.author %}
+                        <a href="{% url 'edit_poll' poll.pk %}">Edit</a> | 
+                        <a href="#">Delete</a> | 
+                        <a href="{% url 'share_poll' poll.pk %}">Share Poll</a>
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+    {% include "pagination.html" with page=page_obj %}
+{% endblock content %}
