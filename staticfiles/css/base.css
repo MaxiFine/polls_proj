@@ -1,0 +1,35 @@
+/* css/base.css */
+
+header {
+    background-color: #212529;
+    color: #ffffff; /* Text color for the header */
+    margin-bottom: 20px; /* Add margin to separate header from content */
+  }
+  
+  .navbar-brand {
+    color: #ffffff;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #ffffff;
+  }
+  
+  .btn-outline-primary {
+    border-color: #007bff; /* Change button border color to blue */
+    color: #6b6a75; /* Change button text color to blue */
+  }
+  
+  /* Adjust margin and padding for homepage text */
+  .jumbotron p.lead {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  /* Add color effect for jumbotron */
+  .jumbotron {
+    background: linear-gradient(135deg, #007bff, #343a40);
+    color: #ffffff;
+    padding: 30px;
+  }
+  
