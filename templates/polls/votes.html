@@ -10,7 +10,7 @@
         </div>
         <div class="card-body">
             <br>
-            <form method="post" action="post">
+            <form method="post" action="{% url 'vote' poll.pk %}">
                 {% csrf_token %}
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="option" id="option1" value="{{ poll.option1 }}">
@@ -30,10 +30,12 @@
                         {{ poll.option3 }}
                     </label>
                 </div>
-            </form>
-            <br>
-            <a class="btn btn-outline-success" href="{% url 'poll_results' poll.pk %}">Vote</a>    
-            <a class="btn btn-outline-primary" href="{% url 'share_poll' poll.pk %}">Share Poll</a>
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-outline-success">Vote</button>  
+                    <a class="btn btn-outline-primary" href="{% url 'share_poll' poll.pk %}">Share Poll</a>
+                </div>
+            </form>       
         </div>
         <br>
 

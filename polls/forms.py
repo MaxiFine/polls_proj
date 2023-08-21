@@ -3,7 +3,7 @@ from .models import Polls
 
 
 
-class PollsQueationForm(forms.ModelForm):
+class PollsQuestionForm(forms.ModelForm):
     class Meta:
         model = Polls
         fields = ['question', 'pc_mail', 'option1', 'option2', 'option3',]

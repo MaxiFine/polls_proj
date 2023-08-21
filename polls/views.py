@@ -1,11 +1,12 @@
+import random
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView, DetailView,TemplateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse_lazy
-from .models import Polls
-from .forms import PollsQueationForm, SharePollForm, EditPollForm
+from .models import Polls, OneTimeCode
+from .forms import PollsQuestionForm, SharePollForm, EditPollForm
 
 
 # HomePage
@@ -30,22 +31,36 @@ class PollsListView(ListView):
     
 # Creating a Poll
 class PollsCreateView(CreateView):
-    form_class = PollsQueationForm
+    form_class = PollsQuestionForm
     template_name = 'polls/create_polls.html'
     success_url = reverse_lazy('list_polls')
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form,})
-    
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('list_poll')
-        else:
-            form = PollsQueationForm()
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        # Generate a new 6-digit code
+        code = random.randint(100000, 999999)
+
+        # Store the code in the OneTimeCode model
+        email = form.cleaned_data.get('pc_mail')
+        if email:
+            # Check if a OneTimeCode object already exists for this email and poll
+            try:
+                existing_code = OneTimeCode.objects.get(email=email, poll=None)
+                existing_code.delete()
+            except OneTimeCode.DoesNotExist:
+                pass
+
+            # Create a new OneTimeCode
+            code = OneTimeCode.objects.create(email=email, code=code)
+            
+            # Send the code to the user's email
+            subject = "Your One-Time Code for Poll Creation"
+            message = f"Your one-time code for poll creation: {code}"
+            send_mail(subject, message, 'your_email@example.com', [email])
+
+        # Proceed with poll creation
+        return super().form_valid(form)
+
+
 
 
 # Post Details
@@ -96,18 +111,16 @@ class EditPollView(UpdateView):
 
 def vote(request, pk):
     poll = Polls.objects.get(pk=pk)
-    
     if request.method == "POST":
-        print(request.POST['polls'])
-        choice = request.POST['poll']
-        if choice == 'option1':
+        choice = request.POST.get('option','')
+        if choice == poll.option1:
             poll.option1_count += 1
-        elif choice == 'option2':
+        elif choice == poll.option2:
             poll.option2_count += 1
-        elif choice == 'option3':
+        elif choice == poll.option3:
             poll.option3_count += 1
         else:
-            messages.warning("Sorry You cannot Vote today\n Invalid Form")
+            messages.warning(request, "Sorry You cannot Vote today\n Invalid Form")
         
         poll.save()
         return redirect('poll_results', poll.pk)
